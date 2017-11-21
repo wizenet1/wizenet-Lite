@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.user.wizenet2">
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_GPS" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.alarm.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/face"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".MainActivity" />
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".MenuActivity" />
+        <activity android:name=".CustomersActivity" />
+        <activity android:name=".FragmentCustomer" />
+        <activity android:name=".ControlPanelActivity" />
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".MessageActivity" />
+
+        <receiver android:name=".Alarm_Receiver" />
+        <receiver android:name=".Alarm_Receiver_Text_File" />
+        <receiver android:name=".Alarm_Receiver_sync_client_products" />
+        <activity android:name=".FragmentMessageDetails" />
+        <activity android:name=".MenuOfflineActivity" />
+        <activity android:name=".ScannerActivity" ></activity>
+        <activity android:name=".ScannerActivityNew" >
+            <intent-filter>
+                <data
+                    android:host="com.example.user.wizenet2"
+                    android:scheme="launch" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBAmDFXJri7OzzoWoA0HfhZvQ1IgN8ZWrE" />
+
+
+    </application>
+
+</manifest>

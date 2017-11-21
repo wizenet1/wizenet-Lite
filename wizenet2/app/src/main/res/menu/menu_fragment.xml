@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".">
+
+
+    <item
+        android:id="@+id/main_id"
+        android:title="@string/main_frag"
+        android:orderInCategory="10"
+         />
+
+
+</menu>

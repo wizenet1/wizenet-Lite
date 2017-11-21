@@ -1,0 +1,76 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+    <!--<item android:id="@+id/action_settings" android:title="@string/action_settings"-->
+        <!--android:orderInCategory="100" app:showAsAction="always" />-->
+    <!--&lt;!&ndash;<item&ndash;&gt;-->
+        <!--android:id="@+id/add" android:icon="@android:drawable/ic_menu_add" app:showAsAction="always"   android:title="@string/bottom_sheet_behavior"/>-->
+    <!--<item-->
+        <!--android:id="@+id/action_filter"-->
+        <!--android:title="@string/filter"-->
+        <!--android:orderInCategory="10"-->
+        <!--android:icon="@drawable/face"-->
+        <!--app:showAsAction="ifRoom" />-->
+    <!--<item-->
+        <!--android:id="@+id/action_filter4"-->
+        <!--android:title="@string/filter"-->
+        <!--android:orderInCategory="10"-->
+        <!--android:icon="@drawable/face"-->
+        <!--app:showAsAction="ifRoom" />-->
+
+    <item
+        android:id="@+id/main_id"
+        android:title="@string/main_menu"
+        android:orderInCategory="10"
+        android:visible="false"
+        android:icon="@drawable/face"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/cp_id"
+        android:title="@string/Control_Panel"
+        android:orderInCategory="10"
+        android:visible="false"
+        android:icon="@drawable/face"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/messages_list"
+        android:title="@string/messages"
+        android:orderInCategory="10"
+        android:visible="false"
+        android:icon="@drawable/face"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/BarCode"
+        android:visible="false"
+        android:title="BarCode"
+        android:orderInCategory="10"
+        android:icon="@drawable/face"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/QRCode"
+        android:visible="false"
+        android:title="QRCode"
+        android:orderInCategory="10"
+        android:icon="@drawable/face"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/gridview"
+        android:title="gridview"
+        android:orderInCategory="10"
+        android:visible="false"
+        android:icon="@drawable/face"
+        app:showAsAction="never" />
+
+    <!--<item-->
+        <!--android:id="@+id/action_filter3"-->
+        <!--android:title="@string/contactus"-->
+        <!--android:orderInCategory="10"-->
+        <!--android:icon="@drawable/face"-->
+        <!--app:showAsAction="never" />-->
+
+    <!--<item-->
+        <!--android:id="@+id/reset" android:icon="@android:drawable/face" app:showAsAction="always|withText" android:title="@string/accept"/>-->
+    <!--&lt;!&ndash;<item&ndash;&gt;-->
+        <!--android:id="@+id/about" android:icon="@android:drawable/ic_dialog_info" app:showAsAction="never" android:title="@string/app_name"/>-->
+
+</menu>

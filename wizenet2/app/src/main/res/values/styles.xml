@@ -1,0 +1,19 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="@android:style/Theme.Holo.Light">
+        <item name="android:actionBarStyle">@style/customActionBar</item>
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <style name="AppTheme.AppBarOverlay" parent="@android:style/Theme.Holo.Light" />
+    <style name="AppTheme.PopupOverlay" parent="@android:style/Theme.Holo.Light" />
+    <style name="customActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">#E94E1B</item>
+
+
+    </style>
+
+</resources>
