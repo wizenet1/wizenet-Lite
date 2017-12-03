@@ -58,96 +58,96 @@ public class Helper {
     }
 
     public  final String DEMOURL = "http://main.wizenet.co.il/webservices/freelance.asmx";//default
-//region sync all products with conditions
-public void ALLProductsSync (final Context ctx){
-    if (isNetworkAvailable(ctx)) {
+    //region sync all products with conditions
+    public void ALLProductsSync (final Context ctx){
+        if (isNetworkAvailable(ctx)) {
 
-        Model.getInstance().Async_Get_mgnet_items_Listener(getMacAddr(), new Model.get_mgnet_items_Listener() {
-            @Override
-            public void onResult(String str) {
-                DatabaseHelper db;
-                db = DatabaseHelper.getInstance(ctx);
-                try{
-                    File myFile = new File(Environment.getExternalStorageDirectory().getPath()+"/wizenet/productss.txt");
-                    if(myFile.exists())
-                        myFile.delete();
-                    Log.e("MYTAG","succied to delete from productss.txt");
-                }catch(Exception e){
+            Model.getInstance().Async_Get_mgnet_items_Listener(getMacAddr(), new Model.get_mgnet_items_Listener() {
+                @Override
+                public void onResult(String str) {
+                    DatabaseHelper db;
+                    db = DatabaseHelper.getInstance(ctx);
+                    try{
+                        File myFile = new File(Environment.getExternalStorageDirectory().getPath()+"/wizenet/productss.txt");
+                        if(myFile.exists())
+                            myFile.delete();
+                        Log.e("MYTAG","succied to delete from productss.txt");
+                    }catch(Exception e){
 
-                }
-                writeTextToSpecificFile("","productss.txt", str);
-                try{
-                    db.delete_from_mgnet_items("all");
-                    Log.e("MYTAG","succied to delete from mgnet_items");
-                }catch(Exception e){
-                    Log.e("MYTAG",e.getMessage());
-                }
-                if (db.mgnet_items_isEmpty("all")) {
-                    //Toast.makeText(getActivity(), "נא להמתין כחצי דקה", Toast.LENGTH_LONG).show();
+                    }
+                    writeTextToSpecificFile("","productss.txt", str);
+                    try{
+                        db.delete_from_mgnet_items("all");
+                        Log.e("MYTAG","succied to delete from mgnet_items");
+                    }catch(Exception e){
+                        Log.e("MYTAG",e.getMessage());
+                    }
+                    if (db.mgnet_items_isEmpty("all")) {
+                        //Toast.makeText(getActivity(), "נא להמתין כחצי דקה", Toast.LENGTH_LONG).show();
 
-                    List<Order> responseList = new ArrayList<Order>();
-                    try {
-                        String strJson = readTextFromFile3("productss.txt");
-                        strJson = strJson.replace("PRODUCTS_ITEMS_LISTResponse", "");
-                        strJson = strJson.replace("PRODUCTS_ITEMS_LISTResult=", "Orders:");
-                        JSONObject j = null;
-                        JSONArray jarray = null;
-                        j = null;
-                        jarray = null;
+                        List<Order> responseList = new ArrayList<Order>();
                         try {
-                            j = new JSONObject(strJson);
-                            jarray = j.getJSONArray("Orders");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        for (int i = 0; i < jarray.length(); i++) {
-                            final JSONObject e;
-                            String name = "";
+                            String strJson = readTextFromFile3("productss.txt");
+                            strJson = strJson.replace("PRODUCTS_ITEMS_LISTResponse", "");
+                            strJson = strJson.replace("PRODUCTS_ITEMS_LISTResult=", "Orders:");
+                            JSONObject j = null;
+                            JSONArray jarray = null;
+                            j = null;
+                            jarray = null;
                             try {
-                                e = jarray.getJSONObject(i);
-                                db.add_mgnet_items(
-                                        e.getString("Pname"),
-                                        e.getString("Pmakat"),
-                                        e.getString("Pprice"),
-                                        e.getString("Poprice"),"all");
-                            } catch (JSONException e1) {
-                                e1.printStackTrace();
+                                j = new JSONObject(strJson);
+                                jarray = j.getJSONArray("Orders");
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
 
+                            for (int i = 0; i < jarray.length(); i++) {
+                                final JSONObject e;
+                                String name = "";
+                                try {
+                                    e = jarray.getJSONObject(i);
+                                    db.add_mgnet_items(
+                                            e.getString("Pname"),
+                                            e.getString("Pmakat"),
+                                            e.getString("Pprice"),
+                                            e.getString("Poprice"),"all");
+                                } catch (JSONException e1) {
+                                    e1.printStackTrace();
+                                }
+
+                            }
+
+
+
+                            writeTextToSpecificFile("","log.txt","פריטים התווספו בהצלחה" + getcurrentDateString());
+                            //Toast.makeText(getActivity(), "פריטים התווספו בהצלחה", Toast.LENGTH_LONG).show();
+
+                        } catch (Exception e) {
+                            writeTextToSpecificFile("","log.txt", e.getMessage().toString()+getcurrentDateString().toString());
+                            //Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
                         }
+                    } else {
+                        writeTextToSpecificFile("","log.txt",  "הפריטים כבר סונכרנו"+getcurrentDateString().toString());
 
+                        //Toast.makeText(getActivity(), "הפריטים כבר סונכרנו", Toast.LENGTH_LONG).show();
 
-
-                        writeTextToSpecificFile("","log.txt","פריטים התווספו בהצלחה" + getcurrentDateString());
-                        //Toast.makeText(getActivity(), "פריטים התווספו בהצלחה", Toast.LENGTH_LONG).show();
-
-                    } catch (Exception e) {
-                        writeTextToSpecificFile("","log.txt", e.getMessage().toString()+getcurrentDateString().toString());
-                        //Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                } else {
-                    writeTextToSpecificFile("","log.txt",  "הפריטים כבר סונכרנו"+getcurrentDateString().toString());
 
-                    //Toast.makeText(getActivity(), "הפריטים כבר סונכרנו", Toast.LENGTH_LONG).show();
-
+                    //tv.setText(str);
+                    Log.e("myTag", str);
                 }
+            });
+        } else {
+            writeTextToSpecificFile("","log.txt",  "network is Not available"+getcurrentDateString().toString());
 
-                //tv.setText(str);
-                Log.e("myTag", str);
-            }
-        });
-    } else {
-        writeTextToSpecificFile("","log.txt",  "network is Not available"+getcurrentDateString().toString());
-
-        // Toast.makeText(getActivity(), "network is Not available", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(getActivity(), "network is Not available", Toast.LENGTH_SHORT).show();
+        }
     }
-}
 
     //endregion
 
 
-//    private void stopService_text(Context ctx){
+    //    private void stopService_text(Context ctx){
 //        Intent intent = new Intent(getApplicationContext(), Alarm_Receiver_Text_File.class);
 //        PendingIntent sender = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
 //        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
@@ -166,7 +166,10 @@ public void ALLProductsSync (final Context ctx){
         }
     }
 
-
+    //**
+    //
+    // this function call the web service and then write it into text file each cid have been sent.
+    //*/
     public void CLIENTProductsSync (final Context ctx,final String cid){
         if (isNetworkAvailable(ctx)) {
 
@@ -231,6 +234,10 @@ public void ALLProductsSync (final Context ctx){
         return true;
     }
 
+    /**
+     * //this function get all cid string array from the json file
+     * @return
+     */
     public List<String> getCIDSlist(){
         List<String> ret = new ArrayList<String>();
         String strJson = "";
@@ -245,24 +252,32 @@ public void ALLProductsSync (final Context ctx){
         }
 
         try {
-        for (int i = 0; i < jarray.length(); i++) {
-            final JSONObject e;
-            String name = null;
-            try {
-                e = jarray.getJSONObject(i);
-                name = e.getString("Cusername");
-                //name = e.getString("Ccompany")+'|'+e.getString("CID");
+            for (int i = 0; i < jarray.length(); i++) {
+                final JSONObject e;
+                String name = null;
+                try {
+                    e = jarray.getJSONObject(i);
+                    name = e.getString("Cusername");
+                    //name = e.getString("Ccompany")+'|'+e.getString("CID");
 
-            } catch (JSONException e1) {
-                e1.printStackTrace();
+                } catch (JSONException e1) {
+                    e1.printStackTrace();
+                }
+                ret.add(name);
             }
-            ret.add(name);
-        }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return  ret;
     }
+
+    /**
+     * in wizenet app we create order, the order are have send to the web service,
+     * the two functions below loop over the order file (json building) and send each of them to webservice
+     * if web service say that he got successfully , remove the file, it's not necessary anymore.
+     * @param ctx
+     */
+    //region SendOrderToWizenet
     public void SendOrderToWizenet(Context ctx) {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd  HH:mm");
         String sdt = df.format(new Date(System.currentTimeMillis()));
@@ -277,6 +292,12 @@ public void ALLProductsSync (final Context ctx){
         }
         writeTextToFileORDER(sdt + isNetwork);
     }
+
+    /**
+     * loop over directory files and create order for each one of them, and then delete the file if success.
+     * @param dir
+     * @param ctx
+     */
     public void traverse (File dir, final Context ctx) {
         if (dir.exists()) {
             File[] files = dir.listFiles();
@@ -299,44 +320,18 @@ public void ALLProductsSync (final Context ctx){
             }
         }
     }
+    //endregion
 
-//    public class BackServices extends Service {
-//
-//        @Override
-//        public IBinder onBind(Intent arg0) {
-//            int len;
-//            if (isNetworkAvailable(this)){
-//                Log.e("MYTAG","hello");
-//                List<String> listCIDS = new ArrayList<String>();
-//                listCIDS=getCIDSlist();
-//                len = listCIDS.size();
-//                String rr = "";
-//                int i=0;
-//                for (String c: listCIDS) {
-//                    CLIENTProductsSync(this,c);
-//                };
-//            }else{
-//                Log.e("MYTAG","no internet");
-//            }
-//
-//
-//
-//
-//            return null;
-//        }
-//
-//        @Override
-//        public int onStartCommand(Intent intent, int flags, int startId) {
-//            // Let it continue running until it is stopped.
-//            Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
-//            return START_STICKY;
-//        }
-//        @Override
-//        public void onDestroy() {
-//            super.onDestroy();
-//            Toast.makeText(this, "Service Destroyed", Toast.LENGTH_LONG).show();
-//        }
-//    }
+
+    /**
+     * every client has  products are belong to him as the system suggest.
+     * here we write the file we get from web service - the created file is client products.
+     * this function can be fit any sub directory.
+     * @param subDirectory
+     * @param fileandsuffix
+     * @param input
+     * @return
+     */
     public boolean writeTextToClientDirectory(String subDirectory,String fileandsuffix,String input){
 
         // get the path to sdcard
@@ -471,6 +466,10 @@ public void ALLProductsSync (final Context ctx){
 
         return ret;
     }
+
+    /**
+     * delete files from products directory
+     */
     public void deleteAllFiles() {
         try{
             File dir = new File(Environment.getExternalStorageDirectory()+"/wizenet/client_products");
@@ -500,6 +499,11 @@ public void ALLProductsSync (final Context ctx){
 
         }
     }
+
+    /**
+     * get json text from file/ read the file
+     * @return
+     */
     public String readTextFromFileCustomers() {
         String ret = "";
 
@@ -613,6 +617,7 @@ public void ALLProductsSync (final Context ctx){
         }
         return marshmallowMacAddress;
     }
+//region get mac address functions
 
     public static String getAdressMacByInterface(){
         try {
@@ -687,6 +692,9 @@ public void ALLProductsSync (final Context ctx){
         return "02:00:00:00:00:00";
     }
 
+
+//endregion
+
     public void goToCPFragment(Context context){
 
         //mydb.getInstance(getApplicationContext());
@@ -743,6 +751,14 @@ public void ALLProductsSync (final Context ctx){
     //###################################
     //EXTRACT CUSTOMERS FROM JSON
     //###################################
+
+    /**
+     * iterate over json file (text file) and extract the json to an objects
+     * @param json
+     * @return
+     */
+    //region get customers objects from json file
+
     public Ccustomer[] getCustomersFromJson(String json){
         Ccustomer[] customersList = new Ccustomer[0];
         JSONObject j = null;
@@ -823,6 +839,9 @@ public void ALLProductsSync (final Context ctx){
         }
         return customersList;
     }
+
+    //endregion
+
     public void goToLoginReportFragment(Context context){
 
         android.support.v4.app.FragmentManager fm = ((FragmentActivity)context).getSupportFragmentManager();
