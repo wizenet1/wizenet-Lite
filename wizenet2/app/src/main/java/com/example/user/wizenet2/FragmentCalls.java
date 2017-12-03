@@ -37,15 +37,15 @@ public class FragmentCalls extends android.support.v4.app.Fragment {
     Button addmem_btn,remove_btn;
     DatabaseHelper db;
     ListView myList;
-    CustomAdapter adapter;
-    List<Message> data2 = new ArrayList<Message>() ;
-    String dataName;
+    //CustomAdapter adapter;
+    //List<Message> data2 = new ArrayList<Message>() ;
+    //String dataName;
     CheckBox cb;
     LocationManager manager = null;
     String firstname="";
     String lastname="";
     boolean result = false;
-    ListView myList; //mSearchNFilterLv
+    //ListView myList; //mSearchNFilterLv
     private EditText mSearchEdt;
     CustomersAdapter customersAdapter; //to refresh the list
     ArrayList<Ccustomer> data2 = new ArrayList<Ccustomer>() ;
@@ -59,7 +59,7 @@ public class FragmentCalls extends android.support.v4.app.Fragment {
     String myBundle= "";
 
 
-            calls_list
+           // calls_list
 //    @Override
 //    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 //

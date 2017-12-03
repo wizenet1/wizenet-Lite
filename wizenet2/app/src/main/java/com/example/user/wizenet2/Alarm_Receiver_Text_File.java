@@ -24,6 +24,10 @@ import java.util.Date;
 /**
  * Created by User on 23/08/2016.
  */
+
+/**
+ * this class send the files (orders) to wizenet one by one in interval of time (5 mins)
+ */
 public class Alarm_Receiver_Text_File extends BroadcastReceiver {
     NotificationManager nm;
     Notification myNotication;

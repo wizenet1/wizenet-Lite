@@ -60,34 +60,6 @@ Helper helper;
                     }
 
 
-//                final String cc = c;
-//                File myFile = new File(Environment.getExternalStorageDirectory().getPath()+"/wizenet/client_products/"+"pl_" + cc +".txt");
-//                if(!myFile.exists()){
-//                    CallSoap cs = new CallSoap(DatabaseHelper.getInstance(context).getValueByKey("URL"));//db.getControlPanel(1).getUrl());
-//                    //String response = cs.Call(mac_address, memail, mpass);
-//                    try{
-//                        String response = cs.get_mgnet_client_items_list(helper.getMacAddr(),c);
-//                        String myResponse = response;
-//                        myResponse = myResponse.replaceAll("PRODUCTS_CLIENTS_ITEMS_LISTResponse", "");
-//                        myResponse = myResponse.replaceAll("PRODUCTS_CLIENTS_ITEMS_LISTResult=", "Orders:");
-//                        myResponse = myResponse.replaceAll(";", "");
-//                        helper.writeTextToClientDirectory("client_products","pl_" + cc +".txt", myResponse);
-//                        Log.e("MYTAG","pl_" + cc +".txt ---" +myResponse);
-//                    }catch(Exception ex){
-//                        Log.e("MYTAG",ex.getMessage());
-//                    }
-//
-////                    Model.getInstance().Async_Get_mgnet_client_items_Listener(helper.getMacAddr(),c, new Model.get_mgnet_client_items_Listener() {
-////                        @Override
-////                        public void onResult(String str) {
-////                            Log.e("MYTAG","pl_" + cc +".txt ---" +str);
-////                            helper.writeTextToClientDirectory("client_products","pl_" + cc +".txt", str);
-////                        };
-////                        ;});
-//                    i++;
-//
-//                }
-
 
             };
         }else{
@@ -96,28 +68,8 @@ Helper helper;
 
 
 
-//        Model.getInstance().AsyncReminder(helper.getMacAddr(), new Model.ReminderListener() {
-//            @Override
-//            public void onResult(String str, String str2, int size) {
-//                if(size==1){
-//                    pushNotification(str,str2);
-//                }else{
-//                    pushNotification("Wizenet",size+" new messages");
-//                }
-//            }
-//        });
     }
 
-
-    //###################################
-    //get mac address
-    //###################################
-//    public String getMacAddress() {
-//        WifiManager manager = (WifiManager) this._context.getSystemService(Context.WIFI_SERVICE);
-//        WifiInfo info = manager.getConnectionInfo();
-//        String address = info.getMacAddress();
-//        return address;
-//    }
 
     //###################################
     //WRITE URL TO FILE

@@ -35,13 +35,18 @@ import java.util.Date;
 /**
  * Created by User on 23/08/2016.
  */
+
+/**
+ * this class built to set push notifications trough alarm manager
+ */
+
 public class Alarm_Receiver extends BroadcastReceiver {
     NotificationManager nm;
     Notification myNotication;
 
     long[] vibrate = { 400, 400, 200,200,200 };
     Calendar calendar = Calendar.getInstance();
-Helper helper;
+    Helper helper;
     int hours = calendar.get(Calendar.HOUR_OF_DAY);
     int minutes = calendar.get(Calendar.MINUTE);
     int seconds = calendar.get(Calendar.SECOND);
@@ -67,15 +72,6 @@ Helper helper;
         });
     }
 
-    //###################################
-    //get mac address
-    //###################################
-//    public String getMacAddress() {
-//        WifiManager manager = (WifiManager) this._context.getSystemService(Context.WIFI_SERVICE);
-//        WifiInfo info = manager.getConnectionInfo();
-//        String address = info.getMacAddress();
-//        return address;
-//    }
 
     //###################################
     //WRITE URL TO FILE
