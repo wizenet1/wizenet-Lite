@@ -144,6 +144,8 @@ Helper helper;
 
             if (flag){
                 Toast.makeText(getApplicationContext(),"internet valid", Toast.LENGTH_LONG).show();
+                //Intent intent = new Intent(getApplicationContext(), MenuOfflineActivity.class);
+
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(intent);
 

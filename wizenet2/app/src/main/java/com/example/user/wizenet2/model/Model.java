@@ -601,9 +601,9 @@ public class Model {
                     String myResponse = response;
 
                     myResponse = myResponse.replaceAll("CALLS_ListResponse", "");
-                    myResponse = myResponse.replaceAll("CALLS_ListResult=", "");
-                    myResponse = myResponse.replaceAll("\\{", "");
-                    myResponse = myResponse.replaceAll("\\}", "");
+                    myResponse = myResponse.replaceAll("CALLS_ListResult=", "Calls:");
+                    //myResponse = myResponse.replaceAll("\\{", "");
+                    //myResponse = myResponse.replaceAll("\\}", "");
                     myResponse = myResponse.replaceAll(";", "");
                     myResponse= myResponse.replaceAll("\\<[^>]*>","");
                     return myResponse.toString();

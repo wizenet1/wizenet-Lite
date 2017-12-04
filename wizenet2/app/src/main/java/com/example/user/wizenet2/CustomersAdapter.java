@@ -25,30 +25,36 @@ import static java.security.AccessController.getContext;
  * Created by WIZE02 on 23/05/2017.
  */
 
-
+/**
+ * the position of adapter is to set the content into listview
+ * with the paramters we pass it.
+ *  ccustomerArrayList - is the list of customers
+ *  ctx - the context we must pass it (relationship between classes and fragments/activities)
+ *  Filterable is the additional built in interface that's allow us to implement the filter edit text
+ */
 public class CustomersAdapter extends BaseAdapter implements Filterable {
     Context c;
     TextView goToTelephone, goToSms,goToCustomers;
 
-    ArrayList<Ccustomer> players;
+    ArrayList<Ccustomer> ccustomerArrayList;
     CustomFilter filter;
     ArrayList<Ccustomer> filterList;
-    public CustomersAdapter(ArrayList<Ccustomer> players,Context ctx) {
+    public CustomersAdapter(ArrayList<Ccustomer> ccustomerArrayList,Context ctx) {
         this.c=ctx;
-        this.players=players;
-        this.filterList=players;
+        this.ccustomerArrayList=ccustomerArrayList;
+        this.filterList=ccustomerArrayList;
     }
     @Override
     public int getCount() {
-        return players.size();
+        return ccustomerArrayList.size();
     }
     @Override
     public Object getItem(int pos) {
-        return players.get(pos);
+        return ccustomerArrayList.get(pos);
     }
     @Override
     public long getItemId(int pos) {
-        return players.indexOf(getItem(pos));
+        return ccustomerArrayList.indexOf(getItem(pos));
     }
     @Override
     public View getView(final int pos, View convertView, ViewGroup parent) {
@@ -82,14 +88,14 @@ public class CustomersAdapter extends BaseAdapter implements Filterable {
         goToSms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Uri uri = Uri.parse("smsto:"+players.get(pos).getCcell());
+                Uri uri = Uri.parse("smsto:"+ccustomerArrayList.get(pos).getCcell());
                 Intent it = new Intent(Intent.ACTION_SENDTO, uri);
                  c.startActivity(it);
             }
         });
         //#################    TEXTVIEW    ##########################
         TextView nameTxt=(TextView) convertView.findViewById(R.id.textView);
-        nameTxt.setText(players.get(pos).getCcompany()+' '+players.get(pos).getCcell());
+        nameTxt.setText(ccustomerArrayList.get(pos).getCcompany()+' '+ccustomerArrayList.get(pos).getCcell());
         convertView.setTag(convertView.getId(),pos);
         convertView.getTag(pos);
 
@@ -99,6 +105,9 @@ public class CustomersAdapter extends BaseAdapter implements Filterable {
     public Filter getFilter() {
         if(filter == null)
         {
+            /**
+             * call the filter class to return the correct filtered list
+             */
             filter=new CustomFilter();
         }
         return filter;
@@ -115,6 +124,11 @@ public class CustomersAdapter extends BaseAdapter implements Filterable {
                 constraint=constraint.toString().toUpperCase();
                 ArrayList<Ccustomer> filters=new ArrayList<Ccustomer>();
                 //get specific items
+
+                /**
+                 * here i loop the customers list that i've passed before
+                 * and filter by chars i type in edittext
+                 */
                 for(int i=0;i<filterList.size();i++)
                 {
                     if(filterList.get(i).getCcompany().toUpperCase().contains(constraint))
@@ -135,165 +149,13 @@ public class CustomersAdapter extends BaseAdapter implements Filterable {
         }
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            players=(ArrayList<Ccustomer>) results.values;
+            /**
+             * what are you going to see in the results
+             */
+            ccustomerArrayList=(ArrayList<Ccustomer>) results.values;
+            //update the listview
             notifyDataSetChanged();
         }
     }
-//    private ArrayList<Ccustomer> mStringList;
-//
-//    private ArrayList<Ccustomer> mStringFilterList;
-//
-//    private LayoutInflater mInflater;
-//
-//    private CustomersAdapter.ValueFilter valueFilter;
-//
-//    public CustomersAdapter(ArrayList<Ccustomer> mStringList,Context context) {
-//
-//        this.mStringList=mStringList;
-//
-//        this.mStringFilterList=mStringList;
-//
-//        mInflater=LayoutInflater.from(context);
-//
-//        getFilter();
-//    }
-//
-//    //How many items are in the data set represented by this Adapter.
-//    @Override
-//    public int getCount() {
-//
-//        return mStringList.size();
-//    }
-//
-//    //Get the data item associated with the specified position in the data set.
-//    @Override
-//    public Object getItem(int position) {
-//
-//        return mStringList.get(position).getCcompany();
-//    }
-//
-//    //Get the row id associated with the specified position in the list.
-//    @Override
-//    public long getItemId(int position) {
-//
-//        return position;
-//    }
-//
-//    //Get a View that displays the data at the specified position in the data set.
-//    @Override
-//    public View getView(int position, View convertView, ViewGroup parent) {
-//
-//        CustomersAdapter.Holder viewHolder = null;
-//
-//        if(convertView==null) {
-//
-//            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-//            View rowView = inflater.inflate(R.layout.customer, parent, false);
-//            TextView name = (TextView) rowView.findViewById(R.id.textView);
-//            //convertView = inflater.inflate(R.layout.customer,null);
-//            //convertView.setTag(position);
-//            viewHolder=new CustomersAdapter.Holder();
-//            convertView=mInflater.inflate(R.layout.customer,null);
-//            viewHolder.nameTv=(TextView)convertView.findViewById(R.id.textView);
-//
-//            //viewHolder.nameTv.setText(mStringList.get(position).getCcompany().toString());
-//            convertView.setTag(viewHolder);
-//
-//        }else{
-//            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-//            View rowView = inflater.inflate(R.layout.customer, parent, false);
-//            TextView name = (TextView) rowView.findViewById(R.id.textView);
-//            convertView = inflater.inflate(R.layout.customer,null);
-//            convertView.setTag(position);
-//            //viewHolder=new CustomersAdapter.Holder();
-//            viewHolder=new CustomersAdapter.Holder();
-//            convertView=mInflater.inflate(R.layout.customer,null);
-//            viewHolder.nameTv=(TextView)convertView.findViewById(R.id.textView);
-//
-//            //viewHolder.nameTv.setText(mStringList.get(position).getCcompany().toString());
-//            convertView.setTag(viewHolder);
-//            //convertView=mInflater.inflate(R.layout.customer,null);
-//
-//            //viewHolder.nameTv=(TextView)convertView.findViewById(R.id.textView);
-//            //viewHolder.nameTv.setText(mStringList.get(position).getCcompany().toString());
-//            //viewHolder=(CustomersAdapter.Holder)convertView.getTag();
-//
-//        }
-//
-//        //viewHolder.nameTv.setText(mStringList.get(position).getCcompany().toString());
-//
-//        return convertView;
-//    }
-//
-//    private class  Holder{
-//
-//        TextView nameTv;
-//    }
-//
-//    //Returns a filter that can be used to constrain data with a filtering pattern.
-//    @Override
-//    public Filter getFilter() {
-//
-//        if(valueFilter==null) {
-//
-//            valueFilter=new CustomersAdapter.ValueFilter();
-//        }
-//
-//        return valueFilter;
-//    }
-//
-//
-//    private class ValueFilter extends Filter {
-//
-//
-//        //Invoked in a worker thread to filter the data according to the constraint.
-//        @Override
-//        protected FilterResults performFiltering(CharSequence constraint) {
-//
-//            FilterResults results=new FilterResults();
-//
-//            if(constraint!=null && constraint.length()>0){
-//
-//                ArrayList<String> filterList=new ArrayList<String>();
-//
-//                for(int i=0;i<mStringFilterList.size();i++){
-//
-//                    if(mStringFilterList.get(i).getCcompany().contains(constraint)) {
-//                        Log.e("TAG","");
-//                        filterList.add(mStringList.get(i).getCcompany());
-//
-//                    }
-//                }
-//
-//
-//                results.count=filterList.size();
-//
-//                results.values=filterList;
-//
-//            }else{
-//
-//                results.count=mStringFilterList.size();
-//
-//                results.values=mStringFilterList;
-//
-//            }
-//
-//            return results;
-//        }
-//
-//
-//        //Invoked in the UI thread to publish the filtering results in the user interface.
-//        @SuppressWarnings("unchecked")
-//        @Override
-//        protected void publishResults(CharSequence constraint,
-//                                      FilterResults results) {
-//
-//            mStringList=(ArrayList<Ccustomer>) results.values;
-//
-//            notifyDataSetChanged();
-//
-//
-//        }
-//
-//    }
+
 }

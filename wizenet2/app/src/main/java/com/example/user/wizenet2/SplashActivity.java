@@ -40,13 +40,15 @@ Helper helper;
         //Remove title bar
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-//Remove notification bar
+        //Remove notification bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_splash);
 
         String s = "http://wizenet.co.il/data/android.jpg" ;
-
+        /**
+         * async download the image to present it
+         */
         try{
             new DownloadImageTask((ImageView) findViewById(R.id.imageView3))
                     .execute(s);
@@ -54,7 +56,8 @@ Helper helper;
             Toast.makeText(getApplicationContext(),ex.getMessage(), Toast.LENGTH_LONG).show();
         }
 
-
+        //here after 5 secs we moves to main/login activity
+        //and here i use handler/run to implement it
         final Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
         if (helper.isNetworkAvailable(ctx)){
             new Handler().postDelayed(new Runnable() {
