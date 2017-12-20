@@ -31,6 +31,7 @@ import java.util.Objects;
 public class CallSoap {
     //#############operation name######################
     public  final String USER_Login = "USER_Login";
+    public  final String Wz_Login = "Wz_Login";
     public  final String USER_Clients = "USER_Clients";
     public  final String USER_Status = "USER_Status";
     public  final String REMINDERS_retAlert = "REMINDERS_retAlert";
@@ -45,6 +46,7 @@ public class CallSoap {
     public  final String NAMESPACE = "http://tempuri.org/";
     //#############SOAP ACTION######################
     public final String USER_Login_SOAP_ACTION = "http://tempuri.org/USER_Login";
+    public final String Wz_Login_SOAP_ACTION = "http://tempuri.org/Wz_Login";
     public final String USER_Clients_SOAP_ACTION2 = "http://tempuri.org/USER_Clients";
     public final String USER_Status_SOAP_ACTION3 = "http://tempuri.org/USER_Status";
     public final String REMINDERS_retAlert_SOAP_ACTION4 = "http://tempuri.org/REMINDERS_retAlert";
