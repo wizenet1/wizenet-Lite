@@ -84,9 +84,9 @@ Helper helper;
         this.context = this;
         boolean flag = isNetworkAvailable(context);
 
-
+        helper = new Helper();
         db = DatabaseHelper.getInstance(getApplicationContext());
-        ctx=this;
+        ctx=this.context;
 
 
             try{
@@ -98,32 +98,13 @@ Helper helper;
 
 
             if(!DatabaseHelper.getInstance(getApplicationContext()).verification("URL")) {
-                DatabaseHelper.getInstance(getApplicationContext()).addControlPanel("username","");
-                DatabaseHelper.getInstance(getApplicationContext()).addControlPanel("BACKGROUND","1");
-                DatabaseHelper.getInstance(getApplicationContext()).addControlPanel("GPS","0");
-                DatabaseHelper.getInstance(getApplicationContext()).addControlPanel("URL","");// url.getText().toString());
-
-                DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                Calendar c_week = Calendar.getInstance();
-                c_week.add(Calendar.DAY_OF_YEAR, 7);
-                String formatted = df.format(c_week.getTime());
-
-                DatabaseHelper.getInstance(getApplicationContext()).addControlPanel("PRODUCTS_UPDATE",formatted);
-                DatabaseHelper.getInstance(getApplicationContext()).addControlPanel("CLIENTS_PRODUCTS_UPDATE",formatted);
-
-
-
-
-                Toast.makeText(getBaseContext(),"url is not exists", Toast.LENGTH_SHORT).show();
+                helper.addInitialfirst(this.context );
             }else{
                 url.setText(DatabaseHelper.getInstance(getApplicationContext()).getValueByKey("URL"));
                 //Toast.makeText(getBaseContext(),"url is exists", Toast.LENGTH_SHORT).show();
             }
             //if file does not exist
-            File dir = new File(Environment.getExternalStorageDirectory().getPath() + "/wizenet/");
-            if (!dir.exists()) {
-                dir.mkdir();
-            }
+
 
 
             button = (Button) findViewById(R.id.continuebutton);
@@ -158,6 +139,7 @@ Helper helper;
 
         }
     }
+
     public boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivity =(ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 

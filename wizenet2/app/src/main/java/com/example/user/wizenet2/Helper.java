@@ -37,6 +37,7 @@ import java.net.NetworkInterface;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -49,6 +50,29 @@ import static java.security.AccessController.getContext;
  */
 public class Helper {
     public Helper() {
+    }
+
+    public void addInitialfirst(Context ctx){
+        DatabaseHelper.getInstance(ctx).addControlPanel("username","");
+        DatabaseHelper.getInstance(ctx).addControlPanel("BACKGROUND","1");
+        DatabaseHelper.getInstance(ctx).addControlPanel("GPS","0");
+        DatabaseHelper.getInstance(ctx).addControlPanel("URL","");// url.getText().toString());
+        DatabaseHelper.getInstance(ctx).addControlPanel("CLIENT_SYNC_PRODUCTS","0");
+
+
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar c_week = Calendar.getInstance();
+        c_week.add(Calendar.DAY_OF_YEAR, 7);
+        String formatted = df.format(c_week.getTime());
+
+        DatabaseHelper.getInstance(ctx).addControlPanel("PRODUCTS_UPDATE",formatted);
+        DatabaseHelper.getInstance(ctx).addControlPanel("CLIENTS_PRODUCTS_UPDATE",formatted);
+
+        Toast.makeText(ctx,"url does not exists", Toast.LENGTH_SHORT).show();
+        File dir = new File(Environment.getExternalStorageDirectory().getPath() + "/wizenet/");
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
     }
 
     public String getcurrentDateString(){

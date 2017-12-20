@@ -166,16 +166,19 @@ public class FragmentMenu extends android.support.v4.app.Fragment  {
                 Toast.makeText(getContext(), "products sync run in the background", Toast.LENGTH_LONG).show();
             }
         }
-        //////////////
-        File myFile = new File(Environment.getExternalStorageDirectory().getPath()+"/wizenet/productss.txt");
-        if (db.mgnet_items_isEmpty("all") || (!myFile.exists())){
-            AlertDialogAllFirstTime();
-            //new FragmentMenuOffline().ProgressTaskAll.execute();
-        }
-        // ---------ALL products first time ------------
-        syncCustomersFirstTime();
 
-        chkUpdateProducts();
+        if (db.getValueByKey("CLIENT_SYNC_PRODUCTS").toString().equals("1")){
+            File myFile = new File(Environment.getExternalStorageDirectory().getPath()+"/wizenet/productss.txt");
+            if (db.mgnet_items_isEmpty("all") || (!myFile.exists())){
+                AlertDialogAllFirstTime();
+            }
+            // ---------ALL products first time ------------
+            syncCustomersFirstTime();
+
+            chkUpdateProducts();
+        }
+
+
 
 
         //id7.setTextSize(60);

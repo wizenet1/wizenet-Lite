@@ -49,7 +49,7 @@ public class ControlPanelFragment extends android.support.v4.app.Fragment  {
     CustomAdapter adapter;
     List<ControlPanel> data2 = new ArrayList<ControlPanel>() ;
     String dataName;
-    CheckBox cb,running_cb;
+    CheckBox cb,running_cb,chk_sync_products;
     LocationManager manager = null;
 
     @Override
@@ -58,23 +58,23 @@ public class ControlPanelFragment extends android.support.v4.app.Fragment  {
         View v = inflater.inflate(R.layout.panel_control_fragment, null);
         setHasOptionsMenu(true);
         manager = (LocationManager)getActivity().getSystemService(getActivity().LOCATION_SERVICE);
-        //key_et = (EditText) v.findViewById(R.id.key_et_id);
-        //val_et = (EditText) v.findViewById(R.id.value_et_id);
-        //remove_btn = (Button) v.findViewById(R.id.btn_remove);
-        //addmem_btn = (Button) v.findViewById(R.id.add_btn_id);
+
         cb = (CheckBox) v.findViewById(R.id.checkBox2);
         running_cb = (CheckBox) v.findViewById(R.id.running_id) ;
         db = DatabaseHelper.getInstance(getContext());
+        chk_sync_products = (CheckBox) v.findViewById(R.id.chk_sync_products) ;
 
 
         boolean isBackground = db.getValueByKey("BACKGROUND").equals("1");
         boolean isGPS = db.getValueByKey("GPS").equals("1");
-
+        boolean isSyncProducts = db.getValueByKey("CLIENT_SYNC_PRODUCTS").equals("1");
 
         running_cb.setChecked(isBackground);
         cb.setChecked(isGPS);
-        //Log.e("myTag","running_cb:"+ isBackground);
-        //Log.e("myTag","cb: "+isGPS);
+        chk_sync_products.setChecked(isSyncProducts);
+
+
+
 
         running_cb.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,6 +124,20 @@ public class ControlPanelFragment extends android.support.v4.app.Fragment  {
                     Log.e("myTag","stop tracking");
                     Toast.makeText(getActivity(),"stop tracking",Toast.LENGTH_LONG).show();
                     getActivity().getSupportFragmentManager().popBackStack();
+
+                }
+            }
+        });
+        chk_sync_products.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (chk_sync_products.isChecked() == true) {
+                    db.getInstance(getContext()).updateValue("CLIENT_SYNC_PRODUCTS","1");
+                    Toast.makeText(getActivity(), "updated", Toast.LENGTH_LONG).show();
+
+                }else{
+                    db.getInstance(getContext()).updateValue("CLIENT_SYNC_PRODUCTS","0");
+                    Toast.makeText(getActivity(), "updated", Toast.LENGTH_LONG).show();
 
                 }
             }
