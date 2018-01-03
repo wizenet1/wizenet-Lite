@@ -1,26 +1,20 @@
 package com.example.user.wizenet2.model;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
+import com.example.user.wizenet2.Call;
 import com.example.user.wizenet2.CallSoap;
+import com.example.user.wizenet2.CallStatus;
 import com.example.user.wizenet2.DatabaseHelper;
 import com.example.user.wizenet2.Helper;
 import com.example.user.wizenet2.Message;
-import com.example.user.wizenet2.Order;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,6 +26,7 @@ import java.util.List;
 public class Model {
     private final static Model instance = new Model();
     Context context;
+    Helper helper = new Helper();
     //ModelSql model = new ModelSql();
     //ModelParse model = new ModelParse();
 
@@ -492,10 +487,10 @@ public class Model {
         task.execute();
     }
 
-
-    public interface get_mgnet_client_items_Listener{
-        public void onResult(String str);
-    }
+//region get_mgnet_client_item
+public interface get_mgnet_client_items_Listener{
+    public void onResult(String str);
+}
     //PRODUCTS_CLIENTS_ITEMS_LIST
     public void Async_Get_mgnet_client_items_Listener(final String macAddress,final String cid, final get_mgnet_client_items_Listener listener) {
         AsyncTask<String,String,String> task = new AsyncTask<String, String, String >() {
@@ -531,6 +526,9 @@ public class Model {
         };
         task.execute();
     }
+
+
+    //endregion
 
 
     //region CREATE_OFFLINE
@@ -625,9 +623,322 @@ public class Model {
         task.execute();
     }
     //endregion
+    //region Wz_Calls_List
+    public interface Wz_Calls_List_Listener{
+        public void onResult(String str);
+    }
+    public void Async_Wz_Calls_List_Listener(final String macAddress,final int CallStatusID, final  Wz_Calls_List_Listener listener) {
+        AsyncTask<String,String,String> task = new AsyncTask<String, String, String >() {
+
+            //###################################
+            //extract the data and return it
+            //###################################
+
+            @Override
+            protected String doInBackground(String... params) {
+                // USER_ClientsResponse
+                CallSoap cs = new CallSoap(DatabaseHelper.getInstance(context).getValueByKey("URL"));
+                String response = cs.Wz_Calls_List(macAddress,CallStatusID);
+                try{
+                    String myResponse = response;
+
+                    myResponse = myResponse.replaceAll("Wz_Calls_ListResponse", "");
+                    myResponse = myResponse.replaceAll("Wz_Calls_ListResult=", "Calls:");
+                    myResponse = myResponse.replaceAll(";", "");
+                    myResponse= myResponse.replaceAll("\\<[^>]*>","");
+                    boolean flag = false;
+                    helper.deleteFile("calls.txt");
+                    DatabaseHelper.getInstance(context).deleteAllCalls();
+                    flag =helper.writeTextToSpecificFile("","calls.txt",myResponse);
+                    if (flag == true){
+                        //public List<String> getCIDSlist(){
+                            List<Call> ret = new ArrayList<Call>();
+                            String strJson = "";
+                            strJson = helper.readTextFromFile3("calls.txt");
+                            DatabaseHelper.getInstance(context).deleteAllCalls();
+                            JSONObject j = null;
+                            JSONArray jarray = null;
+                            try {
+                                j = new JSONObject(strJson);
+                                jarray= j.getJSONArray("Calls");
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Log.e("MYTAG",e.getMessage());
+                                return "";
+                            }
+                            for (int i = 0; i < jarray.length(); i++) {
+                                final JSONObject e;
+
+                                try {
+
+                                    e = jarray.getJSONObject(i);
+                                    boolean isExist =DatabaseHelper.getInstance(context).IsExistCallID(e.getInt("CallID"));
+                                    if (isExist == true)
+                                    {
+                                      continue;
+                                    }
+                                    Call call= new Call();//Integer.valueOf(cursor.getString(cursor.getColumnIndex("CallID"))), Integer.valueOf(cursor.getString(cursor.getColumnIndex("AID"))), Integer.valueOf(cursor.getString(cursor.getColumnIndex("CID"))), cursor.getString(cursor.getColumnIndex("CreateDate")), Integer.valueOf(cursor.getString(cursor.getColumnIndex("statusID"))), cursor.getString(cursor.getColumnIndex("CallPriority")), cursor.getString(cursor.getColumnIndex("subject")), cursor.getString(cursor.getColumnIndex("comments")), cursor.getString(cursor.getColumnIndex("CallUpdate")), cursor.getString(cursor.getColumnIndex("cntrctDate")), Integer.valueOf(cursor.getString(cursor.getColumnIndex("TechnicianID"))), cursor.getString(cursor.getColumnIndex("statusName")), cursor.getString(cursor.getColumnIndex("internalSN")), cursor.getString(cursor.getColumnIndex("Pmakat")), cursor.getString(cursor.getColumnIndex("Pname")), cursor.getString(cursor.getColumnIndex("contractID")), cursor.getString(cursor.getColumnIndex("Cphone")), Integer.valueOf(cursor.getString(cursor.getColumnIndex("OriginID"))), Integer.valueOf(cursor.getString(cursor.getColumnIndex("ProblemTypeID"))), Integer.valueOf(cursor.getString(cursor.getColumnIndex("CallTypeID"))), cursor.getString(cursor.getColumnIndex("priorityID")), cursor.getString(cursor.getColumnIndex("OriginName")), cursor.getString(cursor.getColumnIndex("problemTypeName")), cursor.getString(cursor.getColumnIndex("CallTypeName")), cursor.getString(cursor.getColumnIndex("Cname")), cursor.getString(cursor.getColumnIndex("Cemail")), Integer.valueOf(cursor.getString(cursor.getColumnIndex("contctCode"))), cursor.getString(cursor.getColumnIndex("callStartTime")), cursor.getString(cursor.getColumnIndex("callEndTime")), cursor.getString(cursor.getColumnIndex("Ccompany")), cursor.getString(cursor.getColumnIndex("Clocation")), Integer.valueOf(cursor.getString(cursor.getColumnIndex("callOrder"))), cursor.getString(cursor.getColumnIndex("Caddress")), cursor.getString(cursor.getColumnIndex("Ccity")), cursor.getString(cursor.getColumnIndex("Ccomments")), cursor.getString(cursor.getColumnIndex("Cfname")), cursor.getString(cursor.getColumnIndex("Clname")), cursor.getString(cursor.getColumnIndex("techName")), cursor.getString(cursor.getColumnIndex("Aname")), cursor.getString(cursor.getColumnIndex("ContctName")), cursor.getString(cursor.getColumnIndex("ContctAddress")), cursor.getString(cursor.getColumnIndex("ContctCity")), cursor.getString(cursor.getColumnIndex("ContctCell")), cursor.getString(cursor.getColumnIndex("ContctPhone")), cursor.getString(cursor.getColumnIndex("ContctCity")), cursor.getString(cursor.getColumnIndex("Ccell")), cursor.getString(cursor.getColumnIndex("techColor")), cursor.getString(cursor.getColumnIndex("ContctCemail")), cursor.getString(cursor.getColumnIndex("CallParentID")));
+                                    call.setCallID(e.getInt("CallID"));
+                                    call.setAID(e.getInt("AID"));
+                                    call.setCID(e.getInt("CID"));
+                                   call.setCreateDate(e.getString("createdate"));
+                                  call.setStatusID(e.getInt("statusID"));
+                                  call.setCallPriority(e.getString("CallPriority"));
+                                    call.setSubject(e.getString("subject"));
+                                  call.setComments(e.getString("comments"));
+                                  call.setCallUpdate(e.getString("CallUpdate"));
+                                  call.setCntrctDate(e.getString("cntrctDate"));
+                                   call.setTechnicianID(e.getInt("TechnicianID"));
+                                   call.setStatusName(e.getString("statusName"));
+                                     call.setInternalSN(e.getString("internalSN"));
+                                    call.setPmakat(e.getString("Pmakat"));
+                                    call.setPname(e.getString("Pname"));
+                                     call.setContractID(e.getString("contractID"));
+                                    call.setCphone(e.getString("Cphone"));
+                                    call.setOriginID(e.getInt("OriginID"));
+                                     call.setProblemTypeID(e.getInt("ProblemTypeID"));
+                                     call.setCallTypeID(e.getInt("CallTypeID"));
+                                     call.setPriorityID(e.getString("priorityID"));
+                                     call.setOriginName(e.getString("OriginName"));
+                                   call.setProblemTypeName(e.getString("problemTypeName"));
+                                     call.setCallTypeName(e.getString("CallTypeName"));
+                                     call.setCname(e.getString("Cname"));
+                                     call.setCemail(e.getString("Cemail"));
+                                    call.setContctCode(e.getInt("contctCode"));
+                                     call.setCallStartTime(e.getString("callStartTime"));
+                                     call.setCallEndTime(e.getString("callEndTime"));
+                                    call.setCcompany(e.getString("Ccompany"));
+                                     call.setClocation(e.getString("Clocation"));
+                                     call.setCallOrder(e.getInt("callOrder"));
+                                    call.setCaddress(e.getString("Caddress"));
+                                  call.setCcity(e.getString("Ccity"));
+                                    call.setCcomments(e.getString("Ccomments"));
+                                    call.setCfname(e.getString("Cfname"));
+                                     call.setClname(e.getString("Clname"));
+                                     call.setTechName(e.getString("techName"));
+                                    call.setAname(e.getString("Aname"));
+                                    call.setContctName(e.getString("ContctName"));
+                                     call.setContctAddress(e.getString("ContctAddress"));
+                                    call.setContctCity(e.getString("ContctCity"));
+                                    call.setContctCell(e.getString("ContctCell"));
+                                     call.setContctPhone(e.getString("ContctPhone"));
+                                    call.setCcell(e.getString("Ccell"));
+                                    call.setTechColor(e.getString("techColor"));
+                                     call.setContctCemail(e.getString("ContctCemail"));
+                                     call.setCallParentID(e.getString("CallParentID"));
+                                    DatabaseHelper.getInstance(context).addNewCall(call);
+                                } catch (JSONException e1) {
+                                    e1.printStackTrace();
+                                    Log.e("MYTAG",e1.getMessage());
+                                    return "";
+                                }
+                                //ADD TO DATABASE
+                                //ret.add(name);
+                            }
+
+                            //return  ret;
+                        //}
+                    }
+
+
+                    return "1";//myResponse.toString();
+                }catch(Exception e){
+                    return "nothing? "+e.getMessage();
+                }
+            }
+
+            //###################################
+            //active the fragment with json result by bundle
+            //###################################
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                listener.onResult(result);
+                //goToCustomersFragment(result);
+            }
+        };
+        task.execute();
+    }
+    //endregion
+
+    //region Wz_Call_setTime
+    public interface Wz_Call_setTime_Listener{
+        public void onResult(String str);
+    }
+    public void Async_Wz_Call_setTime_Listener(final String macAddress,final int CallID,final String action,final String latitude,final String longtitude, final Wz_Call_setTime_Listener listener) {
+        AsyncTask<String,String,String> task = new AsyncTask<String, String, String >() {
+            @Override
+            protected String doInBackground(String... params) {
+                // USER_ClientsResponse
+                CallSoap cs = new CallSoap(DatabaseHelper.getInstance(context).getValueByKey("URL"));
+                String response = cs.Wz_Call_setTime(macAddress,CallID,action,latitude,longtitude);
+                try{
+                    String myResponse = response;
+
+                    myResponse = myResponse.replaceAll("Wz_Call_setTimeResponse", "");
+                    myResponse = myResponse.replaceAll("Wz_Call_setTimeResult=", "Wz_Call_setTime:");
+                    myResponse = myResponse.replaceAll(";", "");
+                    myResponse= myResponse.replaceAll("\\<[^>]*>","");
+                    return myResponse.toString();
+                }catch(Exception e){
+                    return "nothing? "+e.getMessage();
+                }
+            }
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                listener.onResult(result);
+                //goToCustomersFragment(result);
+            }
+        };
+        task.execute();
+    }
+    //endregion
+
+    //region Wz_Call_setTime
+    public interface Wz_Call_getTime_Listener{
+        public void onResult(String str);
+    }
+    public void Async_Wz_Call_getTime_Listener(final String macAddress,final int CallID,final String action, final Wz_Call_getTime_Listener listener) {
+        AsyncTask<String,String,String> task = new AsyncTask<String, String, String >() {
+            @Override
+            protected String doInBackground(String... params) {
+                // USER_ClientsResponse
+                CallSoap cs = new CallSoap(DatabaseHelper.getInstance(context).getValueByKey("URL"));
+                String response = cs.Wz_Call_getTime(macAddress,CallID,action);
+                try{
+                    String myResponse = response;
+
+                    myResponse = myResponse.replaceAll("Wz_Call_getTimeResponse", "");
+                    myResponse = myResponse.replaceAll("Wz_Call_getTimeResult=", "Wz_Call_getTime:");
+                    myResponse = myResponse.replaceAll(";", "");
+                    myResponse= myResponse.replaceAll("\\<[^>]*>","");
+                    return myResponse.toString();
+                }catch(Exception e){
+                    return "nothing? "+e.getMessage();
+                }
+            }
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                listener.onResult(result);
+                //goToCustomersFragment(result);
+            }
+        };
+        task.execute();
+    }
+    //endregion
+    //region Wz_Call_Update
+    public interface Wz_Call_Update_Listener{
+        public void onResult(String str);
+    }
+    public void Async_Wz_Call_Update_Listener(final String macAddress,final int CallID,final int CallStatusID,final String CallAnswer, final Wz_Call_Update_Listener listener) {
+        AsyncTask<String,String,String> task = new AsyncTask<String, String, String >() {
+            @Override
+            protected String doInBackground(String... params) {
+                // USER_ClientsResponse
+                CallSoap cs = new CallSoap(DatabaseHelper.getInstance(context).getValueByKey("URL"));
+                String response = cs.Wz_Call_Update(macAddress,CallID,CallStatusID,CallAnswer);
+                try{
+                    String myResponse = response;
+
+                    myResponse = myResponse.replaceAll("Wz_Call_UpdateResponse", "");
+                    myResponse = myResponse.replaceAll("Wz_Call_UpdateResult=", "Wz_Call_Update:");
+                    myResponse = myResponse.replaceAll(";", "");
+                    myResponse= myResponse.replaceAll("\\<[^>]*>","");
+                    return myResponse.toString();
+                }catch(Exception e){
+                    return "nothing? "+e.getMessage();
+                }
+            }
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                listener.onResult(result);
+                //goToCustomersFragment(result);
+            }
+        };
+        task.execute();
+    }
+    //endregion
+    //region Wz_Call_Update
+    public interface Wz_Call_Statuses_Listener{
+        public void onResult(String str);
+    }
+    public void Wz_Call_Statuses_Listener(final String macAddress, final Wz_Call_Statuses_Listener listener) {
+        AsyncTask<String,String,String> task = new AsyncTask<String, String, String >() {
+            @Override
+            protected String doInBackground(String... params) {
+                // USER_ClientsResponse
+                CallSoap cs = new CallSoap(DatabaseHelper.getInstance(context).getValueByKey("URL"));
+                String response = cs.Wz_Call_Statuses(macAddress);
+                try{
+                    String myResponse = response;
+
+                    myResponse = myResponse.replaceAll("Wz_Call_StatusesResponse", "");
+                    myResponse = myResponse.replaceAll("Wz_Call_StatusesResult=", "Wz_Call_Statuses:");
+                    myResponse = myResponse.replaceAll(";", "");
+                    myResponse= myResponse.replaceAll("\\<[^>]*>","");
+
+                    boolean flag = false;
+                    helper.deleteFile("CallStatuses.txt");
+                    DatabaseHelper.getInstance(context).deleteAllCalls();
+                    flag =helper.writeTextToSpecificFile("","CallStatuses.txt",myResponse);
+                    if (flag == true){
+                        String strJson = "";
+                        strJson = helper.readTextFromFile3("CallStatuses.txt");
+                        DatabaseHelper.getInstance(context).deleteCallStatuses();
+                        JSONObject j = null;
+                        JSONArray jarray = null;
+                        try {
+                            j = new JSONObject(strJson);
+                            jarray= j.getJSONArray("Wz_Call_Statuses");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("MYTAG",e.getMessage());
+                            return "";
+                        }
+                        for (int i = 0; i < jarray.length(); i++) {
+                            final JSONObject e;
+
+                            try {
+                                e = jarray.getJSONObject(i);
+                                CallStatus callStatus= new CallStatus();//Integer.valueOf(cursor.getString(cursor.getColumnIndex("CallID"))), Integer.valueOf(cursor.getString(cursor.getColumnIndex("AID"))), Integer.valueOf(cursor.getString(cursor.getColumnIndex("CID"))), cursor.getString(cursor.getColumnIndex("CreateDate")), Integer.valueOf(cursor.getString(cursor.getColumnIndex("statusID"))), cursor.getString(cursor.getColumnIndex("CallPriority")), cursor.getString(cursor.getColumnIndex("subject")), cursor.getString(cursor.getColumnIndex("comments")), cursor.getString(cursor.getColumnIndex("CallUpdate")), cursor.getString(cursor.getColumnIndex("cntrctDate")), Integer.valueOf(cursor.getString(cursor.getColumnIndex("TechnicianID"))), cursor.getString(cursor.getColumnIndex("statusName")), cursor.getString(cursor.getColumnIndex("internalSN")), cursor.getString(cursor.getColumnIndex("Pmakat")), cursor.getString(cursor.getColumnIndex("Pname")), cursor.getString(cursor.getColumnIndex("contractID")), cursor.getString(cursor.getColumnIndex("Cphone")), Integer.valueOf(cursor.getString(cursor.getColumnIndex("OriginID"))), Integer.valueOf(cursor.getString(cursor.getColumnIndex("ProblemTypeID"))), Integer.valueOf(cursor.getString(cursor.getColumnIndex("CallTypeID"))), cursor.getString(cursor.getColumnIndex("priorityID")), cursor.getString(cursor.getColumnIndex("OriginName")), cursor.getString(cursor.getColumnIndex("problemTypeName")), cursor.getString(cursor.getColumnIndex("CallTypeName")), cursor.getString(cursor.getColumnIndex("Cname")), cursor.getString(cursor.getColumnIndex("Cemail")), Integer.valueOf(cursor.getString(cursor.getColumnIndex("contctCode"))), cursor.getString(cursor.getColumnIndex("callStartTime")), cursor.getString(cursor.getColumnIndex("callEndTime")), cursor.getString(cursor.getColumnIndex("Ccompany")), cursor.getString(cursor.getColumnIndex("Clocation")), Integer.valueOf(cursor.getString(cursor.getColumnIndex("callOrder"))), cursor.getString(cursor.getColumnIndex("Caddress")), cursor.getString(cursor.getColumnIndex("Ccity")), cursor.getString(cursor.getColumnIndex("Ccomments")), cursor.getString(cursor.getColumnIndex("Cfname")), cursor.getString(cursor.getColumnIndex("Clname")), cursor.getString(cursor.getColumnIndex("techName")), cursor.getString(cursor.getColumnIndex("Aname")), cursor.getString(cursor.getColumnIndex("ContctName")), cursor.getString(cursor.getColumnIndex("ContctAddress")), cursor.getString(cursor.getColumnIndex("ContctCity")), cursor.getString(cursor.getColumnIndex("ContctCell")), cursor.getString(cursor.getColumnIndex("ContctPhone")), cursor.getString(cursor.getColumnIndex("ContctCity")), cursor.getString(cursor.getColumnIndex("Ccell")), cursor.getString(cursor.getColumnIndex("techColor")), cursor.getString(cursor.getColumnIndex("ContctCemail")), cursor.getString(cursor.getColumnIndex("CallParentID")));
+                                callStatus.setCallStatusID(e.getInt("CallStatusID"));
+                                callStatus.setCallStatusName(e.getString("CallStatusName"));
+                                callStatus.setCallStatusOrder(e.getInt("CallStatusOrder"));
+                                 DatabaseHelper.getInstance(context).addCallStatus(callStatus);
+                            } catch (JSONException e1) {
+                                e1.printStackTrace();
+                                Log.e("MYTAG",e1.getMessage());
+                                return "";
+                            }
+                            //ADD TO DATABASE
+                            //ret.add(name);
+                        }
+
+                        //return  ret;
+                        //}
+                    }
 
 
 
+
+                    return "1";
+                }catch(Exception e){
+                    return "nothing? "+e.getMessage();
+                }
+            }
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                listener.onResult(result);
+                //goToCustomersFragment(result);
+            }
+        };
+        task.execute();
+    }
+    //endregion
 }
 
 

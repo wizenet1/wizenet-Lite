@@ -127,7 +127,16 @@ public class MenuActivity extends FragmentActivity implements LocationListener {
 
 
     }
+public void myFunc(){
+    // CLEAR BACK STACK.
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+        while (fragmentManager.getBackStackEntryCount() ==1) {
+            fragmentManager.popBackStackImmediate();
 
+    }
+    //getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+    //((YourActivityClassName)getActivity()).yourPublicMethod();
+}
     private void stopService_text(){
         Intent intent = new Intent(getApplicationContext(), Alarm_Receiver_Text_File.class);
         PendingIntent sender = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);

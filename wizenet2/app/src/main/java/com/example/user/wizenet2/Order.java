@@ -39,7 +39,7 @@ public class Order {
         this.pmakat = pmakat;
     }
 
-    Order(String pname,String pmakat,String pprice,String poprice){
+    public Order(String pname, String pmakat, String pprice, String poprice){
         this.pname = pname;
         this.pmakat = pmakat;
         this.pprice = pprice;

@@ -36,7 +36,9 @@
         <activity android:name=".ControlPanelActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".MessageActivity" />
-
+        <activity android:name=".ActivityCallDetails" />
+        <activity android:name=".ActivityCalls"
+            android:windowSoftInputMode="stateHidden"/>
         <receiver android:name=".Alarm_Receiver" />
         <receiver android:name=".Alarm_Receiver_Text_File" />
         <receiver android:name=".Alarm_Receiver_sync_client_products" />

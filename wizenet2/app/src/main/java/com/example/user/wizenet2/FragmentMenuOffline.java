@@ -172,15 +172,15 @@ public class FragmentMenuOffline extends android.support.v4.app.Fragment  {
         id5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Model.getInstance().Async_GET_CALLS_LIST_Listener(helper.getMacAddr(), new Model.GET_CALLS_LIST_Listener() {
+                Model.getInstance().Async_Wz_Calls_List_Listener(helper.getMacAddr(), -2, new Model.Wz_Calls_List_Listener() {
                     @Override
                     public void onResult(String str) {
-                        helper.writeTextToSpecificFile("","calls.txt",str);
+                        Toast.makeText(getActivity(), str, Toast.LENGTH_SHORT).show();
                     }
                 });
-
             }
         });
+
         //getView().setFocusableInTouchMode(true);
         //getView().requestFocus();
 

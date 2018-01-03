@@ -3,7 +3,6 @@ package com.example.user.wizenet2;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -25,6 +24,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_CONTROL_PANEL = "ControlPanel";
     private static final String TABLE_MESSAGES = "Messages";
     private static final String mgnet_items = "mgnet_items";
+    private static final String mgnet_calls = "mgnet_calls";
+    private static final String CallStatus = "CallStatus";
+    //Table Columns mgnet_calls
+    //CID, AID, StartDate, subject, CallType, TechnicianID, CPhone, ProblemID,
+     //comments, Pmakat, InternalSN, Pname, OriginID, contractID, cntrctDate, CallStatus, resolution, CallTypeID, Cname, priorityID, contctCode,CallRefID
+
+    //CallStatusID,CallStatusName,CallStatusOrder,* from CallStatus
 
     // Table Columns ControlPanel
     private static final String ID = "id";
@@ -63,9 +69,102 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         mCtx = context;
     }
+    //region unusble
+    String CREATE_mgnet_calls =
+            "CREATE TABLE " + mgnet_calls + "("
+                    + "CallID" +  " INTEGER, "
+                    + "AID" + " INTEGER, "
+                    + "createDate" + " TEXT, "
+                    + "subject" + " TEXT, "
+                    + "CallType" + " TEXT, "
+                    + "TechnicianID" + " INTEGER, "
+                    + "CPhone" + " TEXT, "
+                    + "ProblemID" + " INTEGER, "
+                    + "InternalSN" + " TEXT, "
+                    + "Pname" + " TEXT, "
+                    + "OriginID" + " INTEGER, "
+                    + "contractID" + " INTEGER, "
+                    + "cntrctDate" + " TEXT, "
+                    + "CallStatus" + " INTEGER "
+                    + "resolution" + " TEXT, "
+                    + "CallTypeID" + " INTEGER "
+                    + "priorityID" + " TEXT, "
+                    + "contctCode" + " INTEGER "
+                    + "CallRefID" + " TEXT "
+                    + ")";
+    //endregion   cal
+    // callid=46707, CallStatsName = 3
+    public void updateSpecificValueInTable(String table,String primarykey,String primaryval,String fieldName,String fieldValue) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(fieldName, fieldValue);
+        //values.put(DESCRIPTION, "");
+        db.update(table, values, primarykey +"=" + primaryval, null);
+        db.close();
+    }
     @Override
     public void onCreate(SQLiteDatabase db) {
 
+        String CREATE_mgnet_calls=
+                "CREATE TABLE " + mgnet_calls + "("
+                        + "CallID" +  " INTEGER, "
+                        + "AID"+  " INTEGER, "
+                        + "CID"+  " INTEGER, "
+                        + "CreateDate"+ " TEXT, "
+                        + "EndDate"+ " TEXT, "
+                        + "CallEmail"+ " TEXT, "
+                        + "statusID"+  " INTEGER, "
+                        + "CallPriority"+ " TEXT, "
+                        + "subject"+ " TEXT, "
+                        + "comments"+ " TEXT, "
+                        + "IsClose"+  " INTEGER, "
+                        + "IsRead"+  " INTEGER, "
+                        + "CallType"+ " TEXT, "
+                        + "CallReminderDate"+ " TEXT, "
+                        + "CallUpdate"+ " TEXT, "
+                        + "resolution"+ " TEXT, "
+                        + "cntrctDate"+ " TEXT, "
+                        + "TechnicianID"+  " INTEGER, "
+                        + "statusName"+ " TEXT, "
+                        + "PcatID"+  " INTEGER, "
+                        + "internalSN"+ " TEXT, "
+                        + "Pmakat"+ " TEXT, "
+                        + "Pname"+ " TEXT, "
+                        + "contractID"+ " TEXT, "
+                        + "Cphone"+ " TEXT, "
+                        + "OriginID"+  " INTEGER, "
+                        + "ProblemTypeID"+  " INTEGER, "
+                        + "CallTypeID"+  " INTEGER, "
+                        + "priorityID"+  " TEXT, "
+                        + "OriginName"+ " TEXT, "
+                        + "problemTypeName"+ " TEXT, "
+                        + "CallTypeName"+ " TEXT, "
+                        + "Cname"+ " TEXT, "
+                        + "Cemail"+ " TEXT, "
+                        + "contctCode"+  " INTEGER, "
+                        + "callStartTime"+ " TEXT, "
+                        + "callEndTime"+ " TEXT, "
+                        + "Ccompany"+ " TEXT, "
+                        + "Clocation"+ " TEXT, "
+                        + "callOrder"+  " INTEGER, "
+                        + "Caddress"+ " TEXT, "
+                        + "Ccity"+ " TEXT, "
+                        + "Ccomments"+ " TEXT, "
+                        + "Cfname"+ " TEXT, "
+                        + "Clname"+ " TEXT, "
+                        + "techName"+ " TEXT, "
+                        + "Aname"+ " TEXT, "
+                        + "ContctName"+ " TEXT, "
+                        + "ContctAddress"+ " TEXT, "
+                        + "ContctCity"+ " TEXT, "
+                        + "ContctCell"+ " TEXT, "
+                        + "ContctPhone"+ " TEXT, "
+                        + "Ccell"+ " TEXT, "
+                        + "techColor"+ " TEXT, "
+                        + "ContctCemail"+ " TEXT, "
+                        + "CallParentID"+ " TEXT "
+                        + ")";
         String CREATE_mgnet_items =
                 "CREATE TABLE " + "mgnet_items" + "("
 //                        + "id" +  " TEXT PRIMARY KEY AUTOINCREMENT,"
@@ -73,6 +172,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         + "Pmakat" + " TEXT, "
                         + "Pprice" + " TEXT, "
                         + "Poprice" + " TEXT "
+                        + ")";
+        //CallStatusID,CallStatusName,CallStatusOrder
+        String CREATE_CallStatus =
+                "CREATE TABLE " + CallStatus + "("
+                        + "CallStatusID" + " INTEGER, "
+                        + "CallStatusName" + " TEXT, "
+                        + "CallStatusOrder" + " INTEGER "
                         + ")";
         String CREATE_mgnet_client_items =
                 "CREATE TABLE " + "mgnet_client_items" + "("
@@ -99,10 +205,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         + MsgREAD + " TEXT, "
                         + MsgTYPE + " TEXT "
                         + ")";
+        db.execSQL(CREATE_CallStatus);
         db.execSQL(CREATE_mgnet_items);
         db.execSQL(CREATE_CP_TABLE);
         db.execSQL(CREATE_MESSAGES_TABLE);
         db.execSQL(CREATE_mgnet_client_items);
+        db.execSQL(CREATE_mgnet_calls);
         //db.execSQL("DROP TABLE "+TABLE_CONTROL_PANEL+" ");
 
     }
@@ -115,24 +223,276 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-//    public DatabaseHelper open() throws SQLException {
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        mInstance = this.getInstance(mCtx);
-//        db = mInstance.getWritableDatabase();
-//        return this;
-//
-//    }
+//region CALLS
+
+    public List<Call> getCalls() {
+        List<Call> callList = new ArrayList<Call>();
+// Select All Query
+        String selectQuery ="";
+            selectQuery = "SELECT * FROM mgnet_calls " ;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+// looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                Call c= new Call(
+                Integer.valueOf(cursor.getString(cursor.getColumnIndex("CallID"))),
+                Integer.valueOf(cursor.getString(cursor.getColumnIndex("AID"))),
+                Integer.valueOf(cursor.getString(cursor.getColumnIndex("CID"))),
+                cursor.getString(cursor.getColumnIndex("CreateDate")),
+                Integer.valueOf(cursor.getString(cursor.getColumnIndex("statusID"))),
+                cursor.getString(cursor.getColumnIndex("CallPriority")),
+                cursor.getString(cursor.getColumnIndex("subject")),
+                cursor.getString(cursor.getColumnIndex("comments")),
+                cursor.getString(cursor.getColumnIndex("CallUpdate")),
+                cursor.getString(cursor.getColumnIndex("cntrctDate")),
+                Integer.valueOf(cursor.getString(cursor.getColumnIndex("TechnicianID"))),
+                cursor.getString(cursor.getColumnIndex("statusName")),
+                cursor.getString(cursor.getColumnIndex("internalSN")),
+                cursor.getString(cursor.getColumnIndex("Pmakat")),
+                cursor.getString(cursor.getColumnIndex("Pname")),
+                cursor.getString(cursor.getColumnIndex("contractID")),
+                cursor.getString(cursor.getColumnIndex("Cphone")),
+                Integer.valueOf(cursor.getString(cursor.getColumnIndex("OriginID"))),
+                Integer.valueOf(cursor.getString(cursor.getColumnIndex("ProblemTypeID"))),
+                Integer.valueOf(cursor.getString(cursor.getColumnIndex("CallTypeID"))),
+                cursor.getString(cursor.getColumnIndex("priorityID")),
+                cursor.getString(cursor.getColumnIndex("OriginName")),
+                cursor.getString(cursor.getColumnIndex("problemTypeName")),
+                cursor.getString(cursor.getColumnIndex("CallTypeName")),
+                cursor.getString(cursor.getColumnIndex("Cname")),
+                cursor.getString(cursor.getColumnIndex("Cemail")),
+                Integer.valueOf(cursor.getString(cursor.getColumnIndex("contctCode"))),
+                cursor.getString(cursor.getColumnIndex("callStartTime")),
+                cursor.getString(cursor.getColumnIndex("callEndTime")),
+                cursor.getString(cursor.getColumnIndex("Ccompany")),
+                cursor.getString(cursor.getColumnIndex("Clocation")),
+                Integer.valueOf(cursor.getString(cursor.getColumnIndex("callOrder"))),
+                cursor.getString(cursor.getColumnIndex("Caddress")),
+                cursor.getString(cursor.getColumnIndex("Ccity")),
+                cursor.getString(cursor.getColumnIndex("Ccomments")),
+                cursor.getString(cursor.getColumnIndex("Cfname")),
+                cursor.getString(cursor.getColumnIndex("Clname")),
+                cursor.getString(cursor.getColumnIndex("techName")),
+                cursor.getString(cursor.getColumnIndex("Aname")),
+                cursor.getString(cursor.getColumnIndex("ContctName")),
+                cursor.getString(cursor.getColumnIndex("ContctAddress")),
+                cursor.getString(cursor.getColumnIndex("ContctCity")),
+                cursor.getString(cursor.getColumnIndex("ContctCell")),
+                cursor.getString(cursor.getColumnIndex("ContctPhone")),
+                cursor.getString(cursor.getColumnIndex("ContctCity")),
+                cursor.getString(cursor.getColumnIndex("Ccell")),
+                cursor.getString(cursor.getColumnIndex("techColor")),
+                cursor.getString(cursor.getColumnIndex("ContctCemail")),
+                cursor.getString(cursor.getColumnIndex("CallParentID"))
+                );
+// Adding contact to list
+                callList.add(c);
+            } while (cursor.moveToNext());
+        }
+        db.close();
+        return callList;
+    }
+
+public boolean getCallsCount() {
+    String selectQuery = "SELECT count(callid) as count1 FROM mgnet_calls " ;
+    boolean flag;
+    try {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        flag = (cursor.getCount() > 0) ? true : false;
+        db.close();
+    }catch(Exception e){
+        flag = false;
+        Log.e("MYTAG","db + "+e.getMessage());
+    }
+    return flag;
+}
+    public boolean IsExistCallID(int callid) {
+        String selectQuery = "SELECT * FROM mgnet_calls where callid=" + callid + "" ;
+        boolean flag;
+        try {
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            flag = (cursor.getCount() > 0) ? true : false;
+            db.close();
+        }catch(Exception e){
+            flag = false;
+            Log.e("MYTAG","db + "+e.getMessage());
+        }
+        return flag;
+    }
+public void addNewCall(Call call) {
+    try{
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("CallID" , call.getCallID());
+                values.put("AID", call.getAID());
+                values.put("CID", call.getCID());
+                values.put("CreateDate", call.getCreateDate());
+               // values.put("EndDate", call.getEndDate());
+                //values.put("CallEmail", call.getCallEmail());
+                values.put("statusID", call.getStatusID());
+                values.put("CallPriority", call.getCallPriority());
+                values.put("subject", call.getSubject());
+                values.put("comments", call.getComments());
+                //values.put("IsClose", call.getIsClose());
+                //values.put("IsRead", call.getIsRead());
+                //values.put("CallType", call.getCallType());
+                //values.put("CallReminderDate", call.getCallReminderDate());
+                values.put("CallUpdate", call.getCallUpdate());
+                //values.put("resolution", call.getResolution());
+                values.put("cntrctDate", call.getCntrctDate());
+                values.put("TechnicianID", call.getTechnicianID());
+                values.put("statusName", call.getStatusName());
+                //values.put("PcatID", call.getPcatID());
+                values.put("internalSN", call.getInternalSN());
+                values.put("Pmakat", call.getPmakat());
+                values.put("Pname", call.getPname());
+                values.put("contractID", call.getContractID());
+                values.put("Cphone", call.getCphone());
+                values.put("OriginID", call.getOriginID());
+                values.put("ProblemTypeID" , call.getProblemTypeID());
+                values.put("CallTypeID", call.getCallTypeID());
+                values.put("priorityID", call.getPriorityID());
+                values.put("OriginName", call.getOriginName());
+                values.put("problemTypeName", call.getProblemTypeName());
+                values.put("CallTypeName", call.getCallTypeName());
+                values.put("Cname", call.getCname());
+                values.put("Cemail", call.getCemail());
+                values.put("contctCode", call.getContctCode());
+                values.put("callStartTime", call.getCallStartTime());
+                values.put("callEndTime", call.getCallEndTime());
+                values.put("Ccompany", call.getCcompany());
+                values.put("Clocation", call.getClocation());
+                values.put("callOrder", call.getCallOrder());
+                values.put("Caddress", call.getCaddress());
+                values.put("Ccity", call.getCcity());
+                values.put("Ccomments", call.getCcomments());
+                values.put("Cfname", call.getCfname());
+                values.put("Clname", call.getClname());
+                values.put("techName", call.getTechName());
+                values.put("Aname", call.getAname());
+                values.put("ContctName", call.getContctName());
+                values.put("ContctAddress", call.getContctAddress());
+                values.put("ContctCity", call.getContctCity());
+                values.put("ContctCell", call.getContctCell());
+                values.put("ContctPhone", call.getContctPhone());
+                values.put("Ccell", call.getCcell());
+                values.put("techColor", call.getTechColor());
+                values.put("ContctCemail", call.getContctCemail());
+                values.put("CallParentID", call.getCallParentID());
+
+        // Inserting Row
+        db.insert("mgnet_calls", null, values);
+        // Closing database connection
+        db.close();
+
+    }catch (Exception e){
+        e.printStackTrace();
+        Log.e("MYTAG",e.getMessage());
+    }
+
+}
+    public boolean deleteAllCalls() {
+        boolean flag = true;
+        try{
+            SQLiteDatabase db = this.getWritableDatabase();
+
+            db.delete("mgnet_calls", null, null);
+            db.close();
+
+        }catch (Exception e){
+            flag = false;
+            e.printStackTrace();
+            Log.e("MYTAG",e.getMessage());
+        }
+        return flag;
+    }
+
+//endregion
+public CallStatus getCallStatusByCallStatusName(String CallStatusName){
+
+    CallStatus callStatus = new CallStatus();
+    String selectQuery = "";
+    selectQuery = "SELECT * FROM CallStatus where CallStatusName= '" + CallStatusName + "' ";
+    SQLiteDatabase db = this.getReadableDatabase();
+    try {
+        Cursor cursor= db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            callStatus.setCallStatusID(Integer.valueOf(cursor.getString(cursor.getColumnIndex("CallStatusID"))));
+            callStatus.setCallStatusName( (cursor.getString(cursor.getColumnIndex("CallStatusName"))));
+            callStatus.setCallStatusOrder( Integer.valueOf(cursor.getString(cursor.getColumnIndex("CallStatusOrder"))));
+        }
+        return callStatus;
+    }
+    finally {
+        // if (cursor != null) {
+        //    cursor.close();
+        db.close();
+        return callStatus;
+        //}
+    }
 
 
-//    public Cursor readEntry() {
-//
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        String[] allColumns = new String[] { mInstance.KEY,mInstance.VALUE,mInstance.DESCRIPTION };
-//        Cursor mcursor = db.query(mInstance.TABLE_CONTROL_PANEL, allColumns, null, null, null, null, null);
-//        mcursor.moveToFirst();
-//        db.close();
-//        return  mcursor;
-//    }
+    //db.close();
+    //eturn call;
+}
+    public void addCallStatus(CallStatus callStatus) {
+        try{
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put("CallStatusID", callStatus.getCallStatusID());
+            values.put("CallStatusName", callStatus.getCallStatusName());
+            values.put("CallStatusOrder", callStatus.getCallStatusOrder());
+            db.insert(CallStatus, null, values);
+            // Closing database connection
+            db.close();
+        }catch (Exception e){
+            e.printStackTrace();
+            Log.e("MYTAG",e.getMessage());
+        }
+
+    }
+    //region CallStatus
+    public List<CallStatus> getCallStausList() {
+        List<CallStatus> statusList = new ArrayList<CallStatus>();
+// Select All Query
+        String selectQuery = "";
+            selectQuery = "SELECT * FROM CallStatus";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                CallStatus cp= new CallStatus(
+                        cursor.getInt(0),
+                        cursor.getString(1),
+                        cursor.getInt(2)
+                );
+                statusList.add(cp);
+            } while (cursor.moveToNext());
+        }
+        db.close();
+        return statusList;
+    }
+    public boolean deleteCallStatuses() {
+        boolean flag = true;
+        try{
+            SQLiteDatabase db = this.getWritableDatabase();
+
+            db.delete(CallStatus, null, null);
+            db.close();
+
+        }catch (Exception e){
+            flag = false;
+            e.printStackTrace();
+            Log.e("MYTAG",e.getMessage());
+        }
+        return flag;
+    }
+    //endregion
+
     public boolean isEmpty(String s){
         SQLiteDatabase db = this.getWritableDatabase();
         String count = "SELECT count(*) FROM " + TABLE_CONTROL_PANEL;
@@ -148,6 +508,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
     public boolean mgnet_items_isEmpty(String parameter){
+
         boolean flag = false;
         try{
             SQLiteDatabase db = this.getWritableDatabase();
@@ -287,6 +648,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return flag;
     }
+
+
     public void add_mgnet_items(String pname,String Pmakat,String Pprice,String Poprice,String allORclient) {
         try{
             SQLiteDatabase db = this.getWritableDatabase();
@@ -308,6 +671,87 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Log.e("MYTAG",e.getMessage());
         }
 
+    }
+    public Call getCallDetailsByCallID(int callid){
+
+        //Call call = new Call(Integer.valueOf(cursor.getString(cursor.getColumnIndex("CallID"))), Integer.valueOf(cursor.getString(cursor.getColumnIndex("AID"))), Integer.valueOf(cursor.getString(cursor.getColumnIndex("CID"))), cursor.getString(cursor.getColumnIndex("CreateDate")), Integer.valueOf(cursor.getString(cursor.getColumnIndex("statusID"))), cursor.getString(cursor.getColumnIndex("CallPriority")), cursor.getString(cursor.getColumnIndex("subject")), cursor.getString(cursor.getColumnIndex("comments")), cursor.getString(cursor.getColumnIndex("CallUpdate")), cursor.getString(cursor.getColumnIndex("cntrctDate")), Integer.valueOf(cursor.getString(cursor.getColumnIndex("TechnicianID"))), cursor.getString(cursor.getColumnIndex("statusName")), cursor.getString(cursor.getColumnIndex("internalSN")), cursor.getString(cursor.getColumnIndex("Pmakat")), cursor.getString(cursor.getColumnIndex("Pname")), cursor.getString(cursor.getColumnIndex("contractID")), cursor.getString(cursor.getColumnIndex("Cphone")), Integer.valueOf(cursor.getString(cursor.getColumnIndex("OriginID"))), Integer.valueOf(cursor.getString(cursor.getColumnIndex("ProblemTypeID"))), Integer.valueOf(cursor.getString(cursor.getColumnIndex("CallTypeID"))), cursor.getString(cursor.getColumnIndex("priorityID")), cursor.getString(cursor.getColumnIndex("OriginName")), cursor.getString(cursor.getColumnIndex("problemTypeName")), cursor.getString(cursor.getColumnIndex("CallTypeName")), cursor.getString(cursor.getColumnIndex("Cname")), cursor.getString(cursor.getColumnIndex("Cemail")), Integer.valueOf(cursor.getString(cursor.getColumnIndex("contctCode"))), cursor.getString(cursor.getColumnIndex("callStartTime")), cursor.getString(cursor.getColumnIndex("callEndTime")), cursor.getString(cursor.getColumnIndex("Ccompany")), cursor.getString(cursor.getColumnIndex("Clocation")), Integer.valueOf(cursor.getString(cursor.getColumnIndex("callOrder"))), cursor.getString(cursor.getColumnIndex("Caddress")), cursor.getString(cursor.getColumnIndex("Ccity")), cursor.getString(cursor.getColumnIndex("Ccomments")), cursor.getString(cursor.getColumnIndex("Cfname")), cursor.getString(cursor.getColumnIndex("Clname")), cursor.getString(cursor.getColumnIndex("techName")), cursor.getString(cursor.getColumnIndex("Aname")), cursor.getString(cursor.getColumnIndex("ContctName")), cursor.getString(cursor.getColumnIndex("ContctAddress")), cursor.getString(cursor.getColumnIndex("ContctCity")), cursor.getString(cursor.getColumnIndex("ContctCell")), cursor.getString(cursor.getColumnIndex("ContctPhone")), cursor.getString(cursor.getColumnIndex("ContctCity")), cursor.getString(cursor.getColumnIndex("Ccell")), cursor.getString(cursor.getColumnIndex("techColor")), cursor.getString(cursor.getColumnIndex("ContctCemail")), cursor.getString(cursor.getColumnIndex("CallParentID")));
+        Call call = new Call();
+        String selectQuery = "";
+        selectQuery = "SELECT * FROM mgnet_calls where callid= " + callid + " ";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+
+        try {
+            Cursor cursor= db.rawQuery(selectQuery, null);
+
+            if (cursor.moveToFirst()) {
+                call.setCallID(Integer.valueOf(cursor.getString(cursor.getColumnIndex("CallID"))));
+                call.setAID( Integer.valueOf(cursor.getString(cursor.getColumnIndex("AID"))));
+                call.setCID( Integer.valueOf(cursor.getString(cursor.getColumnIndex("CID"))));
+                call.setCreateDate( (cursor.getString(cursor.getColumnIndex("CreateDate"))));
+                call.setStatusID( Integer.valueOf(cursor.getString(cursor.getColumnIndex("statusID"))));
+                call.setCallPriority( (cursor.getString(cursor.getColumnIndex("CallPriority"))));
+                call.setSubject( (cursor.getString(cursor.getColumnIndex("subject"))));
+                call.setComments( (cursor.getString(cursor.getColumnIndex("comments"))));
+                call.setCallUpdate( (cursor.getString(cursor.getColumnIndex("CallUpdate"))));
+                call.setCntrctDate( (cursor.getString(cursor.getColumnIndex("cntrctDate"))));
+                call.setTechnicianID( Integer.valueOf(cursor.getString(cursor.getColumnIndex("TechnicianID"))));
+                call.setStatusName( (cursor.getString(cursor.getColumnIndex("statusName"))));
+                call.setInternalSN( (cursor.getString(cursor.getColumnIndex("internalSN"))));
+                call.setPmakat( (cursor.getString(cursor.getColumnIndex("Pmakat"))));
+                call.setPname( (cursor.getString(cursor.getColumnIndex("Pname"))));
+                call.setContractID( (cursor.getString(cursor.getColumnIndex("contractID"))));
+                call.setCphone( (cursor.getString(cursor.getColumnIndex("Cphone"))));
+                call.setOriginID( Integer.valueOf(cursor.getString(cursor.getColumnIndex("OriginID"))));
+                call.setProblemTypeID( Integer.valueOf(cursor.getString(cursor.getColumnIndex("ProblemTypeID"))));
+                call.setCallTypeID( Integer.valueOf(cursor.getString(cursor.getColumnIndex("CallTypeID"))));
+                call.setPriorityID( (cursor.getString(cursor.getColumnIndex("priorityID"))));
+                call.setOriginName( (cursor.getString(cursor.getColumnIndex("OriginName"))));
+                call.setProblemTypeName( (cursor.getString(cursor.getColumnIndex("problemTypeName"))));
+                call.setCallTypeName( (cursor.getString(cursor.getColumnIndex("CallTypeName"))));
+                call.setCname( (cursor.getString(cursor.getColumnIndex("Cname"))));
+
+                call.setCemail( (cursor.getString(cursor.getColumnIndex("Cemail"))));
+                call.setContctCode( Integer.valueOf(cursor.getString(cursor.getColumnIndex("contctCode"))));
+                call.setCallStartTime( (cursor.getString(cursor.getColumnIndex("callStartTime"))));
+                call.setCallEndTime( (cursor.getString(cursor.getColumnIndex("callEndTime"))));
+                call.setCcompany( (cursor.getString(cursor.getColumnIndex("Ccompany"))));
+                call.setClocation( (cursor.getString(cursor.getColumnIndex("Clocation"))));
+                call.setCallOrder( Integer.valueOf(cursor.getString(cursor.getColumnIndex("callOrder"))));
+
+                call.setCaddress( (cursor.getString(cursor.getColumnIndex("Caddress"))));
+                call.setCcity( (cursor.getString(cursor.getColumnIndex("Ccity"))));
+                call.setCcomments( (cursor.getString(cursor.getColumnIndex("Ccomments"))));
+                call.setCfname( (cursor.getString(cursor.getColumnIndex("Cfname"))));
+                call.setClname( (cursor.getString(cursor.getColumnIndex("Clname"))));
+
+                call.setTechName( (cursor.getString(cursor.getColumnIndex("techName"))));
+                call.setAname( (cursor.getString(cursor.getColumnIndex("Aname"))));
+                call.setContctName( (cursor.getString(cursor.getColumnIndex("ContctName"))));
+                call.setContctAddress( (cursor.getString(cursor.getColumnIndex("ContctAddress"))));
+                call.setContctCity( (cursor.getString(cursor.getColumnIndex("ContctCity"))));
+
+                call.setContctCell( (cursor.getString(cursor.getColumnIndex("ContctCell"))));
+                call.setContctPhone( (cursor.getString(cursor.getColumnIndex("ContctPhone"))));
+                call.setContctCity( (cursor.getString(cursor.getColumnIndex("ContctCity"))));
+                call.setCcell( (cursor.getString(cursor.getColumnIndex("Ccell"))));
+                call.setTechColor( (cursor.getString(cursor.getColumnIndex("techColor"))));
+                call.setContctCemail( (cursor.getString(cursor.getColumnIndex("ContctCemail"))));
+                call.setCallParentID( (cursor.getString(cursor.getColumnIndex("CallParentID"))));
+            }
+            return call;
+        }
+        finally {
+           // if (cursor != null) {
+            //    cursor.close();
+                db.close();
+                return call;
+            //}
+        }
+
+
+        //db.close();
+        //eturn call;
     }
 
     public void addControlPanel(String key,String val) {

@@ -12,6 +12,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
 import android.os.SystemClock;
@@ -388,7 +389,23 @@ public class Helper {
         }
         return true;
     }
+    public boolean deleteFile(String file){
+        boolean flag = false;
+        try{
+            File myFile = new File(Environment.getExternalStorageDirectory().getPath()+"/wizenet/" + file);
+            if(myFile.exists()){
+                myFile.delete();
+                flag = true;
+                Log.e("MYTAG","file is deleted");
+            }
 
+
+
+        }catch(Exception e){
+
+        }
+        return flag;
+    }
     public boolean writeTextToSpecificFile(String subDirectory,String fileandsuffix,String input){
 
         // get the path to sdcard
@@ -415,11 +432,13 @@ public class Helper {
             myOutWriter.write(myInput);
             myOutWriter.close();
             fOut.close();
-            Log.e("MYTAG","success to write file all products");
+            Log.e("MYTAG","success to write file");
             //Toast.makeText(getApplicationContext(), "File Created", Toast.LENGTH_LONG).show();
         } catch (Exception e) {
+
             e.printStackTrace();
             Log.e("MYTAG",e.getMessage());
+            return false;
         }
         return true;
     }
@@ -737,6 +756,41 @@ public class Helper {
         ft.replace(R.id.container,frag,"FragmentTools");
         //tv.setVisibility(TextView.GONE);
         ft.addToBackStack("FragmentTools");
+        ft.commit();
+    }
+    public void goToCallsFragment(Context context){
+        android.support.v4.app.FragmentManager fm = ((FragmentActivity)context).getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction ft = fm.beginTransaction();
+        FragmentCalls frag = new FragmentCalls();
+        ft.replace(R.id.container,frag,"FragmentCalls");
+        //tv.setVisibility(TextView.GONE);
+        ft.addToBackStack("FragmentCalls");
+        ft.commit();
+    }
+    public void goToCallDetailsFrag(Context context,String puId)
+    {
+        android.support.v4.app.FragmentManager fm = ((FragmentActivity)context).getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction ft = fm.beginTransaction();
+        Bundle bundle = new Bundle();
+        FragmentCallDetails frag = new FragmentCallDetails();
+        //bundle.putString("receiver", dataName);
+        bundle.putString("puId",puId);
+        frag.setArguments(bundle);
+        ft.replace(R.id.container,frag,"FragmentCallDetails");
+        ft.addToBackStack("FragmentCallDetails");
+        ft.commit();
+    }
+    public void goToCallDetailsFragNew(Context context,String puId)
+    {
+        android.support.v4.app.FragmentManager fm = ((FragmentActivity)context).getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction ft = fm.beginTransaction();
+        Bundle bundle = new Bundle();
+        FragmentCallDetails frag = new FragmentCallDetails();
+        //bundle.putString("receiver", dataName);
+        bundle.putString("puId",puId);
+        frag.setArguments(bundle);
+        ft.replace(R.id.container,frag,"FragmentCallDetails");
+        ft.addToBackStack("FragmentCallDetails");
         ft.commit();
     }
     public void goToOrdersFragment(Context context){

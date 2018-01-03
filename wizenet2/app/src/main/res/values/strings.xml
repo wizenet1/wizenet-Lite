@@ -15,6 +15,15 @@
     <string name="fa_icon_cart">&#xf370;</string>
     <string name="fa_icon_order">&#xf137;</string>
     <string name="fa_icon_download">&#xf41f;</string>
+    <string name="fa_icon_edit">&#xf2bf;</string>
+    <string name="fa_icon_location">&#xf456;</string>
+    <string name="fa_icon_sign">&#xf417;</string>
+    <string name="fa_icon_car">&#xf36f;</string>
+    <string name="fa_icon_play">&#xf215;</string>
+    <string name="fa_icon_stop">&#xf24f;</string>
+    <string name="fa_icon_telephone">&#xf4b8;</string>
+    <string name="fa_icon_asterisk">&#xf314;</string>
+    <string name="fa_icon_headphones">&#xf140;</string>
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_maps">Map</string>

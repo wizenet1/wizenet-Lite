@@ -27,6 +27,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.user.wizenet2.Adapters.NamesAdapter;
+import com.example.user.wizenet2.Adapters.OrdersAdapter;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -97,18 +100,22 @@ public class FragmentOrders extends android.support.v4.app.Fragment{
             e.printStackTrace();
         }
 
-
-        for (int i = 0; i < jarray.length(); i++) {
-            final JSONObject e;
-            String name = null;
-            try {
-                e = jarray.getJSONObject(i);
-                name = e.getString("Ccompany")+'|'+e.getString("CID")+"~"+e.getString("Cusername");
-            } catch (JSONException e1) {
-                e1.printStackTrace();
+        try {
+            for (int i = 0; i < jarray.length(); i++) {
+                final JSONObject e;
+                String name = null;
+                try {
+                    e = jarray.getJSONObject(i);
+                    name = e.getString("Ccompany")+'|'+e.getString("CID")+"~"+e.getString("Cusername");
+                } catch (JSONException e1) {
+                    e1.printStackTrace();
+                }
+                responseList2.add(name);
             }
-            responseList2.add(name);
+        } catch (Exception e){
+            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
         }
+
         final AutoCompleteTextView textViewClients = (AutoCompleteTextView)
                 v.findViewById(R.id.auto_complete_id);
         final AutoCompleteTextView textView_products_all = (AutoCompleteTextView)

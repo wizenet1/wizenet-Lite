@@ -108,7 +108,7 @@ public class FragmentMenu extends android.support.v4.app.Fragment  {
         id9.setTypeface(icon_manager.get_Icons("fonts/ionicons.ttf",getContext()));
 
         id1.setTextSize(60);
-        //id1.setText("@string/fa_icon_toolbox");
+
         id1_text.setText("משימות");
         id2.setTextSize(60);
         id2_text.setText("לקוחות אישיים");
@@ -120,6 +120,9 @@ public class FragmentMenu extends android.support.v4.app.Fragment  {
         id5_text.setText("הגדרות");
         id6.setTextSize(60);
         id6_text.setText("כלים");
+        id6.setTextSize(60);
+        id6_text.setText("");
+        id7.setTextSize(60);
         id8.setTextSize(60);
         id8_text.setText("מובייל");
         id9.setTextSize(60);
@@ -224,6 +227,29 @@ public class FragmentMenu extends android.support.v4.app.Fragment  {
                  helper.goToToolsFragment(context);
              }
          });
+        id7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ActivityCalls.class);
+                startActivity(intent);
+
+//                Model.getInstance().Wz_Call_Statuses_Listener(helper.getMacAddr(), new Model.Wz_Call_Statuses_Listener() {
+//                    @Override
+//                    public void onResult(String str) {
+//
+//                    }
+//                });
+//                Model.getInstance().Async_Wz_Calls_List_Listener(helper.getMacAddr(), -2, new Model.Wz_Calls_List_Listener() {
+//                    @Override
+//                    public void onResult(String str) {
+//                        Toast.makeText(getActivity(), str, Toast.LENGTH_SHORT).show();
+//                        //helper.goToCallsFragment(context);
+//
+//                    }
+//                });
+
+            }
+        });
         id8.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -1,4 +1,4 @@
-package com.example.user.wizenet2;
+package com.example.user.wizenet2.Adapters;
 
 import android.content.Context;
 import android.util.Log;
@@ -9,6 +9,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.user.wizenet2.DatabaseHelper;
+import com.example.user.wizenet2.Helper;
+import com.example.user.wizenet2.Order;
+import com.example.user.wizenet2.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
